@@ -1,0 +1,19 @@
+FROM python:3.12.2-alpine3.19
+
+RUN apk add git
+
+RUN mkdir dhpp-api
+
+WORKDIR /dhpp-api
+
+COPY . .
+
+RUN python -m venv env
+
+RUN chown=python:python . ./env/bin/activate
+
+RUN pip install --no-cache-dir --upgrade --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r requirements.txt
+
+EXPOSE 8000
+
+CMD  python main.py

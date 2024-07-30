@@ -1,0 +1,15 @@
+services:
+  api:
+    container_name: container-aplicacao
+    env_file:
+      - .env
+    restart: always
+    ports: 
+      - "8000:8000"
+    build: 
+      context: "./"
+      dockerfile: Dockerfile-Api
+    volumes:
+      - ./:/dhpp-api
+    networks:
+      - api-compose-networks
