@@ -4,18 +4,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.doc.informações_geral import informacao_api
 from src.utils.env import arq_env
 from src.routes.index import index_router
-
+from src.db.conexao import object_postgres
 app = FastAPI(
     title=informacao_api['titulo_api'],
     description=informacao_api['descrição'],
-    version=informacao_api['version_numero']
+    version=informacao_api['version_numero'],
 )
   
 origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
-
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
