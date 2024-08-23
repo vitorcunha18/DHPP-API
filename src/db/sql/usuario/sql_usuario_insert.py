@@ -18,7 +18,7 @@ def SQL_INSERT_PESSOA(dados: Pessoa):
             '{dados.identidade_genero}', 
             '{dados.pdc}')
         RETURNING id;
-    """
+    """.upper()
     
 
 def SQL_INSERT_ENDERECO(dados: Endereco, fk_pessoa):
@@ -31,10 +31,9 @@ def SQL_INSERT_ENDERECO(dados: Endereco, fk_pessoa):
             '{dados.bairro}', 
             '{dados.cidade}', 
             '{dados.cep}', 
-            '{dados.cep}', 
             '{dados.uf}', 
             '{fk_pessoa}');
-    """
+    """.upper()
     
 
 def SQL_INSERT_CONTATO(dados: Contato, fk_pessoa):
@@ -46,14 +45,14 @@ def SQL_INSERT_CONTATO(dados: Contato, fk_pessoa):
             '{dados.telefone}', 
             '{dados.email}', 
             {fk_pessoa});
-    """
+    """.upper()
 
 def SQL_INSERT_USUARIO(dados: Usuario, fk_pessoa):
-    return  f"""
+    return f"""
         INSERT INTO public.usuario(
             usuario, senha,  fk_pessoa)
         VALUES 
             ('{dados.usuario}', 
             '{dados.senha}', 
-            {fk_pessoa};
-    """
+            {fk_pessoa});
+    """.upper()

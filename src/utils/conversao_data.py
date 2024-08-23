@@ -15,8 +15,6 @@ def conveter_data(data: date):
             second=00
         )
 
-        print(dia, mes, ano)
-
         return data_nascimento
     
 

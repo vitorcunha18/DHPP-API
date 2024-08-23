@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+
 from src.doc.informações_geral import informacao_api
 from src.utils.env import arq_env
 from src.routes.index import index_router
@@ -27,4 +28,5 @@ app.include_router(index_router, prefix=informacao_api["version_prefix"])
 if __name__ == "__main__":
     import uvicorn
     # uvicorn.run("main:app", host="0.0.0.0", port=8000, log_level="info", reload=True)
+    
     uvicorn.run("main:app", host="127.0.0.1", port=8000, log_level="info", reload=True)

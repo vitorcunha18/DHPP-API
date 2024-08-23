@@ -1,43 +1,13 @@
-from ....schema.pessoa.pessoa_schema import Pessoa
+from ....schema.delegado.delegado_schema import DelegadoCreate
 from ....schema.endereco.endereco_schema import Endereco
 from ....schema.contato.contato_schema import Contato
 
 
-def SQL_INSERT_PESSOA(dados: Pessoa):
+def SQL_INSERT_DELEGADO(dados: DelegadoCreate, fk_pessoa):
     return f"""
-        INSERT INTO public.pessoa(
-            nome, nome_social, nascimento, cpf, sexo, etnia, identidade_genero, pdc)
+        INSERT INTO public.delegado(
+            oab, fk_pessoa)
         VALUES 
-            ('{dados.nome}', 
-            '{dados.nome_social}', 
-            '{dados.nascimento}', 
-            '{dados.cpf}', 
-            '{dados.sexo}', 
-            '{dados.etnia}', 
-            '{dados.identidade_genero}', 
-            '{dados.pdc}')
-        RETURNING id;
-    """
-def SQL_INSERT_ENDERECO(dados: Endereco, fk_pessoa):
-    return f"""
-        INSERT INTO public.endereco(
-            logradouro, n_residencia, bairro, cidade, cep, uf, fk_pessoa)
-        VALUES 
-            ('{dados.logradouro}', 
-            '{dados.n_residencia}', 
-            '{dados.bairro}', 
-            '{dados.cidade}', 
-            '{dados.cep}', 
-            '{dados.uf}', 
+            ('{dados.oab}', 
             '{fk_pessoa}');
-    """
-def SQL_INSERT_CONTATO(dados: Contato, fk_pessoa):
-    return f"""
-        INSERT INTO public.contato(
-            celular, telefone, email, fk_pessoa)
-        VALUES 
-            ('{dados.celular}', 
-            '{dados.telefone}', 
-            '{dados.email}', 
-            {fk_pessoa});
     """

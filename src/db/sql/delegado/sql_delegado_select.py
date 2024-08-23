@@ -1,5 +1,5 @@
 
-def SQL_SELECT_PESSOA(chave):
+def SQL_SELECT_DELEGADO(chave):
     sql =  f"""
         SELECT 
             *
@@ -17,6 +17,10 @@ def SQL_SELECT_PESSOA(chave):
             usuario
         ON
             pessoa.id = usuario.fk_pessoa
+        INNER JOIN 
+            delegado
+        ON
+            pessoa.id = delegado.fk_pessoa
 
         WHERE pessoa.cpf = '{chave}'
     """
