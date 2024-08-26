@@ -1,5 +1,5 @@
 
-def SQL_SELECT_DELEGADO(cpf):
+def SQL_SELECT_ESCRIVAO(cpf):
     sql =  f"""
         SELECT 
             *
@@ -18,9 +18,9 @@ def SQL_SELECT_DELEGADO(cpf):
         ON
             pessoa.id = usuario.fk_pessoa
         INNER JOIN 
-            delegado
+            escrivao
         ON
-            pessoa.id = delegado.fk_pessoa
+            pessoa.id = escrivao.fk_pessoa
 
         WHERE pessoa.cpf = '{cpf}'
     """

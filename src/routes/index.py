@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from src.routes import usuario_route, delegado_route, escrivao_route
+from src.routes import usuario_route, delegado_route, escrivao_route, cartorio
 
 index_router = APIRouter()
 
@@ -14,4 +14,7 @@ index_router.include_router(
 
 index_router.include_router(
     escrivao_route.router_escrivao, prefix="/escrivao", tags=["Escrivão"]
+)
+index_router.include_router(
+    cartorio.router_cartorio, prefix="/cartorio", tags=["Cartorio"]
 )
