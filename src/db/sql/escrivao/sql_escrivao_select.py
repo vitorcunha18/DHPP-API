@@ -21,6 +21,10 @@ def SQL_SELECT_ESCRIVAO(cpf):
             escrivao
         ON
             pessoa.id = escrivao.fk_pessoa
+        INNER JOIN 
+            cartorio
+        ON
+            cartorio.id = escrivao.fk_cartorio
 
         WHERE pessoa.cpf = '{cpf}'
     """

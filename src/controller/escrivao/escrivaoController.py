@@ -61,17 +61,17 @@ class Escrivao():
           finally:
               await cursor.close()
 
-     async def update_escrivao(self, user_json_update, conn: AsyncConnectionPool): 
+     async def update_escrivao(self, user_json_update: EscrivaoCreate, conn: AsyncConnectionPool): 
                try:
                     filter_keys = user_json_update.model_dump(exclude_none=True)
 
                     async with conn.transaction():
                          async with conn.cursor() as cursor:
-                              set_pessoa_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.items() if key not in ['usuario', 'endereco', 'contato', 'delegado']])
+                              set_pessoa_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.items() if key not in ['usuario', 'endereco', 'contato', 'escrivao']])
 
                               await cursor.execute(SQL_UPDATE_GENERICO(table="pessoa", usuario=23, dados=set_pessoa_clause, extra="RETURNING CPF"))
 
-                              pessoa_update = await cursor.fetchall()
+                              escrivao_update = await cursor.fetchall()
 
 
                               if 'usuario' in filter_keys:
@@ -95,9 +95,9 @@ class Escrivao():
                                    await cursor.execute(SQL_UPDATE_GENERICO(table="delegado", usuario=23, dados=set_delegado_clause, fk=True, fk_name="fk_pessoa"))
 
 
-                              await cursor.execute(SQL_SELECT_DELEGADO(pessoa_update[0][0]))
+                              await cursor.execute(SQL_SELECT_ESCRIVAO(escrivao_update[0][0]))
                               
-                              pessoa = await self.get_delegado(cpf=pessoa_update[0][0], conn=conn)
+                              pessoa = await self.get_delegado(cpf=escrivao_update[0][0], conn=conn)
 
 
                     return pessoa
