@@ -30,3 +30,5 @@ class UsuarioUpdate(PessoaUpdate):
     usuario: Optional[UsuarioUpdate] = None
     endereco: Optional[Endereco] = None
     contato: Optional[Contato] = None
+
+

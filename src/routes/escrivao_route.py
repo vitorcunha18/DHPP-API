@@ -6,7 +6,7 @@ from fastapi import HTTPException
 
 from ..controller.escrivao.escrivaoController import object_escrivao
 from ..schema.escrivao.escrivao_schema import EscrivaoCreate, EscrivaoResponse
-
+from ..middlewares.upper_case import Mid_uppercase_dependency
 from ..db import object_postgres
 
 
@@ -14,7 +14,7 @@ router_escrivao = APIRouter()
 
 # Criação de Escrivão
 @router_escrivao.post("/", status_code=status.HTTP_201_CREATED, name="Cadastrar escrivão")
-async def post_escrivao(usuario: EscrivaoCreate, conn:AsyncConnectionPool = Depends(object_postgres.get_connection)):
+async def post_escrivao(usuario: EscrivaoCreate = Depends(Mid_uppercase_dependency(EscrivaoCreate)), conn:AsyncConnectionPool = Depends(object_postgres.get_connection)):
     """Endpoint para criação de escrivão"""
     
     return await object_escrivao.create_escrivao(user_json_create=usuario, conn=conn)
@@ -29,7 +29,7 @@ async def get_usuario(cpf:str, conn:AsyncConnectionPool = Depends(object_postgre
     
 # Editar de usuario
 @router_escrivao.put("/", status_code=status.HTTP_201_CREATED, name="Cadastrar escrivão")
-async def put_escrivao(usuario: EscrivaoCreate, conn:AsyncConnectionPool = Depends(object_postgres.get_connection)):
+async def put_escrivao(usuario: EscrivaoCreate = Depends(Mid_uppercase_dependency(EscrivaoCreate)), conn:AsyncConnectionPool = Depends(object_postgres.get_connection)):
     """Endpoint para editar de escrivão"""
     
     return await object_escrivao.update_escrivao(user_json_create=usuario, conn=conn)

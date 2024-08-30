@@ -21,19 +21,34 @@ def SQL_INSERT_PESSOA(dados: Pessoa):
     """.upper()
     
 
-def SQL_INSERT_ENDERECO(dados: Endereco, fk_pessoa):
-    return f"""
-        INSERT INTO public.endereco(
-            logradouro, n_residencia, bairro, cidade, cep, uf, fk_pessoa)
-        VALUES 
-            ('{dados.logradouro}', 
-            '{dados.n_residencia}', 
-            '{dados.bairro}', 
-            '{dados.cidade}', 
-            '{dados.cep}', 
-            '{dados.uf}', 
-            '{fk_pessoa}');
-    """.upper()
+def SQL_INSERT_ENDERECO(dados: Endereco, fk_pessoa=None):
+    if fk_pessoa == None:
+        return f"""
+            INSERT INTO public.endereco(
+                logradouro, n_residencia, bairro, cidade, cep, uf)
+            VALUES 
+                ('{dados.logradouro}', 
+                '{dados.n_residencia}', 
+                '{dados.bairro}', 
+                '{dados.cidade}', 
+                '{dados.cep}', 
+                '{dados.uf}')
+            RETURNING id;
+        """.upper()
+    else:    
+        return f"""
+            INSERT INTO public.endereco(
+                logradouro, n_residencia, bairro, cidade, cep, uf, fk_pessoa)
+            VALUES 
+                ('{dados.logradouro}', 
+                '{dados.n_residencia}', 
+                '{dados.bairro}', 
+                '{dados.cidade}', 
+                '{dados.cep}', 
+                '{dados.uf}', 
+                '{fk_pessoa}')
+            RETURNING id;
+        """.upper()
     
 
 def SQL_INSERT_CONTATO(dados: Contato, fk_pessoa):
