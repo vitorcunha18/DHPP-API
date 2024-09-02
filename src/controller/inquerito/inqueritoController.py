@@ -73,7 +73,7 @@ class Inquerito():
                               data_envolvidos = [(x, y, inquerito_id) for x, y in zip_longest(list_vitima, list_suspeito)]
                                         
 
-                              values = ', '.join(f"({value if value is not None else 'NULL'})" for value in data_envolvidos)
+                              values = ', '.join(f"{value if value is not None else 'NULL'}" for value in data_envolvidos)
  
                               query = f" INSERT INTO public.envolvidos_inquerito (fk_vitima, fk_suspeito, fk_inquerito) VALUES {values}"
 
