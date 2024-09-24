@@ -3,18 +3,19 @@ from ....schema.inquerito.inquerito_schema import Inquerito, Processo, Envolvido
 def SQL_INSERT_INQUERITO(dados: Inquerito, escrivao, cartorio, endereco):
     return f"""
         INSERT INTO public.inquerito (
-	        n_sinesp, n_ip, tipo, data_instaraucao, data_ocorrencia, fk_escrivao, fk_cartorio, fk_endereco
+	        n_sinesp, n_ip, tipo_ip, data_instaraucao, data_ocorrencia, fk_escrivao, fk_cartorio, fk_endereco, tipificacao
             )
 	    VALUES 
             ('{dados.n_sinesp}', 
             '{dados.n_ip}', 
-            '{dados.tipo}', 
+            '{dados.tipo_ip}', 
             '{dados.data_instauracao}', 
             '{dados.data_instauracao}', 
             '{escrivao}', 
             '{cartorio}', 
-            '{endereco}')
-        RETURNING id;
+            '{endereco}',
+            '{dados.tipificacao}')
+        RETURNING inquerito_id;
     """.upper()
     
 
@@ -28,7 +29,7 @@ def SQL_INSERT_PROCESSO(dados: Processo, inquerito):
             '{dados.representacao_juducial}', 
             '{dados.cumprimento_mandado}',
             '{inquerito}')
-        RETURNING id;
+        RETURNING processo_id;
     """.upper()
     
 
@@ -39,7 +40,7 @@ def SQL_INSERT_ENVOVIDOS_INQUERITO():
 	        fk_vitima, fk_suspeito, fk_inquerito)
 	    VALUES 
             (%s %s %s)
-        RETURNING id;
+        RETURNING env_inq_id ;
     """
     
 

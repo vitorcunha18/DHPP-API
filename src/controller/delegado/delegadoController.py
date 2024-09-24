@@ -39,7 +39,8 @@ class Delegado():
           except errors.UniqueViolation:
                return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Um dos valores já existe'}) 
           
-          except errors.StringDataRightTruncation:
+          except errors.StringDataRightTruncation as erro:
+               print(erro)
                return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Limite do dado '})
 
           except Exception as erro:

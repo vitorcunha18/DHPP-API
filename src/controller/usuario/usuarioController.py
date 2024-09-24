@@ -10,6 +10,7 @@ from ...schema.usuario.usuario_schema import UsuarioCreate, UsuarioUpdate
 from ...db.sql.usuario.sql_usuario_insert import SQL_INSERT_PESSOA, SQL_INSERT_CONTATO, SQL_INSERT_ENDERECO, SQL_INSERT_USUARIO
 from ...db.sql.usuario.sql_usuario_select import SQL_SELECT_PESSOA
 from ...db.sql.utils.update_generic import SQL_UPDATE_GENERICO
+from ...db.dict_select import split_table_dict
 
 class Usuario():
      async def create_usuario(self, user_json_create: UsuarioCreate, conn: AsyncConnectionPool):
@@ -39,6 +40,7 @@ class Usuario():
                return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Limite do dado '})
 
           except Exception as erro:
+               print(erro)
                return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Erro genérico'})
 
      async def get_usuario(self, cpf:str, conn: AsyncConnectionPool): 
@@ -47,9 +49,11 @@ class Usuario():
                
                     await cursor.execute(SQL_SELECT_PESSOA(cpf))
                     
-                    pessoa = await cursor.fetchall()
+                    pessoa = await cursor.fetchone()
 
-                    return pessoa
+                    dict_pessoa = split_table_dict(data=pessoa, pessoa=True)
+
+                    return dict_pessoa
           except Exception as erro:
                pass
 

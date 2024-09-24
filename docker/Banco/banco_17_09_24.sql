@@ -67,10 +67,9 @@ CREATE TABLE IF NOT EXISTS public.inquerito
     tipo character varying COLLATE pg_catalog."default",
     data_instaraucao timestamp with time zone,
     data_ocorrencia timestamp with time zone,
-    fk_escrivao integer NOT NULL,
-    fk_cartorio integer NOT NULL,
-    fk_endereco integer NOT NULL,
-    tipificacao character varying COLLATE pg_catalog."default",
+    fk_escrivao serial NOT NULL,
+    fk_cartorio serial NOT NULL,
+    fk_endereco serial NOT NULL,
     CONSTRAINT inquerito_pkey PRIMARY KEY (inquerito_id)
 );
 
@@ -122,8 +121,7 @@ CREATE TABLE IF NOT EXISTS public.vitima
     usuario_id integer NOT NULL DEFAULT nextval('vitima_id_seq'::regclass),
     faccao character varying(15) COLLATE pg_catalog."default",
     vulgo character varying(10) COLLATE pg_catalog."default",
-    fk_pessoa integer NOT NULL,
-    ligacao_suspeito boolean,
+    fk_pessoa serial NOT NULL,
     CONSTRAINT vitima_pkey PRIMARY KEY (usuario_id)
 );
 

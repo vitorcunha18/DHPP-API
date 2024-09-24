@@ -1,7 +1,7 @@
-from ....schema.vitima.vitima_schema import VitimaCreate
+from ....schema.vitima.vitima_schema import Vitima
 
 
-def SQL_INSERT_VITIMA(dados: VitimaCreate, fk_pessoa):
+def SQL_INSERT_VITIMA(dados: Vitima, fk_pessoa):
     return f"""
         INSERT INTO public.vitima(
             faccao, vulgo, fk_pessoa)
@@ -9,5 +9,5 @@ def SQL_INSERT_VITIMA(dados: VitimaCreate, fk_pessoa):
             ('{dados.faccao}', 
             '{dados.vulgo}',
             '{fk_pessoa}')
-        RETURNING id;
+        RETURNING vitima_id;
     """

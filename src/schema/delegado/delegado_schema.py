@@ -4,7 +4,7 @@ from typing import Optional
 from ..usuario.usuario_schema import UsuarioCreate, UsuarioResponse, UsuarioUpdate
 
 class Delegado(BaseModel):
-    oab: Optional[str]= Field(None, example="00000000000")
+    oab: Optional[str]= Field(None, example="0000000000")
 
 class DelegadoCreate(UsuarioCreate):
     delegado: Optional[Delegado]

@@ -10,8 +10,8 @@ class Pessoa(BaseModel):
     cpf: Optional[str] = Field(None,example="00011122204") 
     sexo: Literal['F','M'] = Field(..., title="Sexo do Usuário", example="[F, M]")
     etnia: Optional[str] = Field(None,example="SDFHUSDF")
-    identidade_genero: Optional[str]= Field(None, example="SDFSDF")
-    pdc: Optional[str] = Field(None, example="DASDQEWES")
+    lgbt: Optional[bool]= Field(None, example="True")
+    pcd: Optional[bool] = Field(None, example="False")
     
 # Response
 class PessoaResponse(BaseModel):
@@ -21,8 +21,15 @@ class PessoaResponse(BaseModel):
     cpf: Optional[str] = None
     sexo: Optional[str] = None
     etnia: Optional[str] = None
-    identidade_genero: Optional[str] = None
-    pdc: Optional[str] = None
+    lgbt: Optional[bool] = None
+    pdc: Optional[bool] = None
+
+
+class PessoaAuth(BaseModel):
+    id : Optional[int] = None
+    nome: Optional[str] = None
+    cpf: Optional[str] = None
+
 
 # Update
 class PessoaUpdate(BaseModel):
@@ -31,5 +38,5 @@ class PessoaUpdate(BaseModel):
     nascimento: Optional[date] = Field(None)
     sexo: Optional[Literal['F','M']] = Field(None, example="[F, M]")
     etnia: Optional[str] = Field(None,example="SDFHUSDF")
-    identidade_genero: Optional[str]= Field(None, example="SDFSDF")
-    pdc: Optional[str] = Field(None, example="DASDQEWES")
+    lgbt: Optional[bool]= Field(None, example="False")
+    pdc: Optional[bool] = Field(None, example="False")

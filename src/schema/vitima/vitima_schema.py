@@ -12,9 +12,9 @@ class Vitima(BaseModel):
     
 
 class VitimaCreate(Pessoa):
-    endereco: Optional[Endereco]
-    contato: Optional[Contato]
-    vitima: Optional[Vitima]
+    endereco: Optional[Endereco]= None
+    contato: Optional[Contato]= None
+    vitima: Optional[Vitima] = None
 
 
 class VitimaResponse(Vitima, Endereco, Contato, Pessoa):

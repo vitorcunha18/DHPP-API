@@ -11,9 +11,9 @@ class Suspeito(BaseModel):
     vulgo: Optional[str]= Field(None, example="JEBBFS")
     
 class SuspeitoCreate(Pessoa):
-    endereco: Optional[Endereco]
-    contato: Optional[Contato]
-    suspeito: Optional[Suspeito]
+    endereco: Optional[Endereco] = None
+    contato: Optional[Contato] = None
+    suspeito: Optional[Suspeito] = None
 
 class SuspeitoResponse(Suspeito, Endereco, Contato, Pessoa):
     pass

@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Literal, Optional, List
-from datetime import date
+from datetime import date, datetime
 
 from ..vitima.vitima_schema import VitimaCreate
 from ..suspeito.suspeito_schema import SuspeitoCreate
@@ -19,14 +19,15 @@ class Processo(BaseModel):
 class Inquerito(BaseModel):
     n_sinesp: Optional[str] = Field(None, example="DIEINA")
     n_ip: Optional[str] = Field(None, example="JEBBFS")
-    tipo: Optional[str] = Field(None, example="JEBBFS")
-    data_instauracao: Optional[date] = Field()
-    data_ocorrencia: Optional[date] = Field()
+    tipo_ip: Optional[str] = Field(None, example="JEBBFS")
+    tipificacao: Optional[str] = Field(None, example="JEBBFS")
+    data_instauracao: Optional[datetime] = Field()
+    data_ocorrencia: Optional[datetime] = Field()
     
 class InqueritoCreate(Inquerito):
-    processo: Optional[Processo]
+    processo: Optional[Processo] = None
     endereco_ocorrencia: Optional[Endereco]
-    vitima: Optional[List[VitimaCreate]]
-    suspeito: Optional[List[SuspeitoCreate]]
+    vitima: Optional[List[VitimaCreate]] = None
+    suspeito: Optional[List[SuspeitoCreate]] = None
      
 

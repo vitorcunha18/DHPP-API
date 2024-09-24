@@ -2,12 +2,12 @@ from ....schema.pessoa.pessoa_schema import Pessoa
 from ....schema.endereco.endereco_schema import Endereco
 from ....schema.contato.contato_schema import Contato
 from ....schema.usuario.usuario_schema import Usuario
-
+from ....auth.security import gerar_hash_senha
 
 def SQL_INSERT_PESSOA(dados: Pessoa):
     return f"""
         INSERT INTO public.pessoa(
-	        nome, nome_social, nascimento, cpf, sexo, etnia, identidade_genero, pdc)
+	        nome, nome_social, nascimento, cpf, sexo, etnia, lgbt, pcd)
 	    VALUES 
             ('{dados.nome}', 
             '{dados.nome_social}', 
@@ -15,9 +15,9 @@ def SQL_INSERT_PESSOA(dados: Pessoa):
             '{dados.cpf}', 
             '{dados.sexo}', 
             '{dados.etnia}', 
-            '{dados.identidade_genero}', 
-            '{dados.pdc}')
-        RETURNING id;
+            '{dados.lgbt}', 
+            '{dados.pcd}')
+        RETURNING pessoa_id;
     """.upper()
     
 
@@ -33,7 +33,7 @@ def SQL_INSERT_ENDERECO(dados: Endereco, fk_pessoa=None):
                 '{dados.cidade}', 
                 '{dados.cep}', 
                 '{dados.uf}')
-            RETURNING id;
+            RETURNING endereco_id;
         """.upper()
     else:    
         return f"""
@@ -47,7 +47,7 @@ def SQL_INSERT_ENDERECO(dados: Endereco, fk_pessoa=None):
                 '{dados.cep}', 
                 '{dados.uf}', 
                 '{fk_pessoa}')
-            RETURNING id;
+            RETURNING endereco_id;
         """.upper()
     
 
@@ -68,6 +68,6 @@ def SQL_INSERT_USUARIO(dados: Usuario, fk_pessoa):
             usuario, senha,  fk_pessoa)
         VALUES 
             ('{dados.usuario}', 
-            '{dados.senha}', 
+            '{gerar_hash_senha(dados.senha)}', 
             {fk_pessoa});
-    """.upper()
+    """

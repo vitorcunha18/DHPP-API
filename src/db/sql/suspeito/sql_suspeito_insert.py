@@ -9,5 +9,5 @@ def SQL_INSERT_SUSPEITO(dados: Suspeito, fk_pessoa):
             ('{dados.faccao}', 
             '{dados.vulgo}',
             '{fk_pessoa}')
-        RETURNING id;
+        RETURNING suspeito_id;
     """
