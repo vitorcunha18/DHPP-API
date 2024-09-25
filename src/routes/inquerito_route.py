@@ -17,7 +17,7 @@ from ..auth.auth import get_usuario_autenticado
 router_inquerito = APIRouter()
 
 # Criação de usuario
-@router_inquerito.post("/", status_code=status.HTTP_201_CREATED, name="Cadastrar Inquerito")
+@router_inquerito.post("/", name="Cadastrar Inquerito")
 async def post_inquerito(inquerito: InqueritoCreate = Depends(Mid_uppercase_dependency(InqueritoCreate)), conn:AsyncConnectionPool = Depends(object_postgres.get_connection), usuario_logado:UsuarioAuth = Depends(get_usuario_autenticado)):
     """Endpoint para criação de usuário"""
     

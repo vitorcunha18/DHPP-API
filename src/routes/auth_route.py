@@ -53,7 +53,7 @@ async def usuario_autenticar(form_data: OAuth2PasswordRequestForm = Depends(), s
     return JSONResponse(content={"access_token": TOKEN, "token_type": "bearer"}, status_code=status.HTTP_200_OK)
 
 
-@router_auth.get('/logado', name="Autenticado", response_model=UsuarioAuth)
+@router_auth.get('/logado', name="Autenticado")
 def usuario_autenticado(usuario_logado:UsuarioAuth = Depends(get_usuario_autenticado)):
     """Endpoint para verificar o usuário autorizado"""
     

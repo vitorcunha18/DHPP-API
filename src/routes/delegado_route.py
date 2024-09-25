@@ -16,7 +16,7 @@ router_delegado = APIRouter()
 
 # Criação de usuario
 @router_delegado.post("/", status_code=status.HTTP_201_CREATED, name="Cadastrar Delegado")
-async def post_delegado(usuario: DelegadoCreate = Depends(Mid_uppercase_dependency(DelegadoCreate)), conn:AsyncConnectionPool = Depends(object_postgres.get_connection), usuario_logado: UsuarioResponse = Depends(get_usuario_autenticado)):
+async def post_delegado(usuario: DelegadoCreate = Depends(Mid_uppercase_dependency(DelegadoCreate)), conn:AsyncConnectionPool = Depends(object_postgres.get_connection)):
     """Endpoint para criação do delegado"""
 
     return await object_delegado.create_delegado(user_json_create=usuario, conn=conn)

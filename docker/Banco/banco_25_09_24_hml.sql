@@ -3,7 +3,7 @@ BEGIN;
 
 CREATE TABLE IF NOT EXISTS public.cartorio
 (
-    cartorio_id integer NOT NULL DEFAULT nextval('cartorio_id_seq'::regclass),
+    cartorio_id serial NOT NULL,
     nome character varying(15) COLLATE pg_catalog."default",
     fk_delegado integer NOT NULL,
     CONSTRAINT cartorio_pkey PRIMARY KEY (cartorio_id)
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS public.cartorio
 
 CREATE TABLE IF NOT EXISTS public.contato
 (
-    contato_id integer NOT NULL DEFAULT nextval('contato_id_seq'::regclass),
+    contato_id serial NOT NULL,
     celular character varying(11) COLLATE pg_catalog."default",
     telefone character varying(11) COLLATE pg_catalog."default",
     email character varying(30) COLLATE pg_catalog."default",
@@ -21,15 +21,15 @@ CREATE TABLE IF NOT EXISTS public.contato
 
 CREATE TABLE IF NOT EXISTS public.delegado
 (
-    delegado_id integer NOT NULL DEFAULT nextval('delegado_id_seq'::regclass),
+    delegado_id serial NOT NULL,
     oab character varying(10) COLLATE pg_catalog."default",
-    fk_pessoa serial NOT NULL,
+    fk_pessoa integer NOT NULL,
     CONSTRAINT delegado_pkey PRIMARY KEY (delegado_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.endereco
 (
-    endereco_id integer NOT NULL DEFAULT nextval('endereco_id_seq'::regclass),
+    endereco_id serial NOT NULL,
     logradouro character varying(100) COLLATE pg_catalog."default",
     n_residencia character varying COLLATE pg_catalog."default",
     bairro character varying(100) COLLATE pg_catalog."default",
@@ -42,24 +42,24 @@ CREATE TABLE IF NOT EXISTS public.endereco
 
 CREATE TABLE IF NOT EXISTS public.envolvidos_inquerito
 (
-    "env_inq_id " integer NOT NULL DEFAULT nextval('"envolvidos_inquerito_id _seq"'::regclass),
+    env_inq_id serial NOT NULL,
     fk_vitima integer,
     fk_suspeito integer,
     fk_inquerito integer NOT NULL,
-    CONSTRAINT envolvidos_inquerito_pkey PRIMARY KEY ("env_inq_id ")
+    CONSTRAINT envolvidos_inquerito_pkey PRIMARY KEY (env_inq_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.escrivao
 (
-    escrivao_id integer NOT NULL DEFAULT nextval('escrivao_id_seq'::regclass),
-    fk_pessoa serial NOT NULL,
-    fk_cartorio serial NOT NULL,
+    escrivao_id serial NOT NULL,
+    fk_pessoa integer NOT NULL,
+    fk_cartorio integer NOT NULL,
     CONSTRAINT escrivao_pkey PRIMARY KEY (escrivao_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.inquerito
 (
-    inquerito_id integer NOT NULL DEFAULT nextval('inquerito_id_seq'::regclass),
+    inquerito_id serial NOT NULL,
     n_sinesp character varying COLLATE pg_catalog."default" NOT NULL,
     n_ip character varying COLLATE pg_catalog."default",
     tipo_ip character varying COLLATE pg_catalog."default",
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS public.inquerito
 
 CREATE TABLE IF NOT EXISTS public.pessoa
 (
-    pessoa_id integer NOT NULL DEFAULT nextval('pessoa_id_seq'::regclass),
+    pessoa_id serial NOT NULL,
     nome character varying(100) COLLATE pg_catalog."default" NOT NULL,
     nome_social character varying(100) COLLATE pg_catalog."default" NOT NULL,
     nascimento timestamp without time zone NOT NULL,
@@ -89,17 +89,17 @@ CREATE TABLE IF NOT EXISTS public.pessoa
 
 CREATE TABLE IF NOT EXISTS public.processo
 (
-    processo_id integer NOT NULL DEFAULT nextval('processo_id_seq'::regclass),
+    processo_id serial NOT NULL,
     n_processo character varying COLLATE pg_catalog."default",
     representacao_judicial character varying COLLATE pg_catalog."default",
     cumprimento_mandado character varying COLLATE pg_catalog."default",
-    fk_inquerito serial NOT NULL,
+    fk_inquerito integer NOT NULL,
     CONSTRAINT processo_pkey PRIMARY KEY (processo_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.suspeito
 (
-    suspeito_id integer NOT NULL DEFAULT nextval('suspeito_id_seq'::regclass),
+    suspeito_id serial NOT NULL,
     faccao character varying(15) COLLATE pg_catalog."default",
     vulgo character varying(10) COLLATE pg_catalog."default",
     fk_pessoa integer NOT NULL,
@@ -108,16 +108,16 @@ CREATE TABLE IF NOT EXISTS public.suspeito
 
 CREATE TABLE IF NOT EXISTS public.usuario
 (
-    usuario_id integer NOT NULL DEFAULT nextval('usuario_id_seq'::regclass),
+    usuario_id serial NOT NULL,
     usuario character varying(20) COLLATE pg_catalog."default" NOT NULL,
     senha character varying COLLATE pg_catalog."default",
-    fk_pessoa serial NOT NULL,
+    fk_pessoa integer NOT NULL,
     CONSTRAINT usuario_pkey PRIMARY KEY (usuario_id)
 );
 
 CREATE TABLE IF NOT EXISTS public.vitima
 (
-    vitima_id integer NOT NULL DEFAULT nextval('vitima_id_seq'::regclass),
+    vitima_id serial NOT NULL,
     faccao character varying(15) COLLATE pg_catalog."default",
     vulgo character varying(10) COLLATE pg_catalog."default",
     fk_pessoa integer NOT NULL,

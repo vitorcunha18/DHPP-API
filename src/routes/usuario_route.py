@@ -15,7 +15,7 @@ router_usuario = APIRouter()
 
 # Criação de usuario
 @router_usuario.post("/", status_code=status.HTTP_201_CREATED, name="Cadastrar Usuário")
-async def post_usuario(usuario: UsuarioCreate = Depends(Mid_uppercase_dependency(UsuarioCreate)), conn:AsyncConnectionPool = Depends(object_postgres.get_connection), usuario_logado: UsuarioResponse = Depends(get_usuario_autenticado)):
+async def post_usuario(usuario: UsuarioCreate = Depends(Mid_uppercase_dependency(UsuarioCreate)), conn:AsyncConnectionPool = Depends(object_postgres.get_connection)):
     """Endpoint para criação de usuário"""
     
     return await object_usuario.create_usuario(user_json_create=usuario, conn=conn)

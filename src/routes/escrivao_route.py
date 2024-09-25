@@ -16,7 +16,7 @@ router_escrivao = APIRouter()
 
 # Criação de Escrivão
 @router_escrivao.post("/", status_code=status.HTTP_201_CREATED, name="Cadastrar escrivão")
-async def post_escrivao(usuario: EscrivaoCreate = Depends(Mid_uppercase_dependency(EscrivaoCreate)), conn:AsyncConnectionPool = Depends(object_postgres.get_connection), usuario_logado: UsuarioResponse = Depends(get_usuario_autenticado)):
+async def post_escrivao(usuario: EscrivaoCreate = Depends(Mid_uppercase_dependency(EscrivaoCreate)), conn:AsyncConnectionPool = Depends(object_postgres.get_connection)):
     """Endpoint para criação de escrivão"""
     
     return await object_escrivao.create_escrivao(user_json_create=usuario, conn=conn)
