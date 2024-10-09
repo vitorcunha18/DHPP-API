@@ -21,14 +21,13 @@ from ...db.sql.utils.update_generic import SQL_UPDATE_GENERICO
 
 class Inquerito():
      async def create_inquerito(self, inquerito_json_create: InqueritoCreate, user_auth:UsuarioAuth, conn: AsyncConnectionPool):
-          try:
+          # try:
                async with conn.transaction():
                     async with conn.cursor() as cursor:
                     
                          await cursor.execute(SQL_INSERT_ENDERECO(dados=inquerito_json_create.endereco_ocorrencia))
 
                          endereco_id = (await cursor.fetchone())[0]
-
 
                          if endereco_id:
                               await cursor.execute(SQL_INSERT_INQUERITO(
@@ -104,24 +103,32 @@ class Inquerito():
 
                     return JSONResponse(status_code=status.HTTP_201_CREATED, content={'message':'Inquerito criado com sucesso'})
 
-          except errors.InvalidDatetimeFormat:
-               return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'As datas não atendem'})
+          # except errors.InvalidDatetimeFormat:
+          #      return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'As datas não atendem'})
 
-          except errors.UniqueViolation:
-               return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Um dos valores já existe'}) 
+          # except errors.UniqueViolation:
+          #      return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Um dos valores já existe'}) 
           
-          except errors.StringDataRightTruncation:
-               return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Limite do dado '})
+          # except errors.StringDataRightTruncation:
+          #      return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Limite do dado '})
 
-          except Exception as erro:
-               print("Erroe",erro)
-               return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Erro genérico'})
+          # except Exception as erro:
+          #      print("Erroe", erro)
+          #      return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Erro genérico'})
 
      async def get_inquerito(self, user_auth:UsuarioAuth, conn: AsyncConnectionPool): 
           # try:
-               print("print 0")
 
                return await get_inquerito_dict(conn=conn, user=user_auth)
+          # except Exception as erro:
+          #      pass
+
+          # finally:
+          #     await cursor.close()
+     async def get_inquerito_unique(self, inquerito, user_auth:UsuarioAuth, conn: AsyncConnectionPool): 
+          # try:
+
+               return await get_inquerito_dict(conn=conn, inquerito=inquerito, unique=True ,user=user_auth)
           # except Exception as erro:
           #      pass
 

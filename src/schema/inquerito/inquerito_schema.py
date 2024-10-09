@@ -20,6 +20,7 @@ class Inquerito(BaseModel):
     n_sinesp: Optional[str] = Field(None, example="DIEINA")
     n_ip: Optional[str] = Field(None, example="JEBBFS")
     tipo_ip: Optional[str] = Field(None, example="JEBBFS")
+    tipo_portaria: Optional[str] = Field(None, example="JEBBFS")
     tipificacao: Optional[str] = Field(None, example="JEBBFS")
     data_instauracao: Optional[datetime] = Field()
     data_ocorrencia: Optional[datetime] = Field()

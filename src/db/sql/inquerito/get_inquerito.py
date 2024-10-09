@@ -1,19 +1,21 @@
 from psycopg.rows import dict_row
-from ..inquerito.sql_inquerito_select import SQL_SELECT_INQUERITO
+from ..inquerito.sql_inquerito_select import SQL_SELECT_INQUERITO, SQL_SELECT_INQUERITO_UNIQUE
 from .dict_select_inquerito import split_table_inquerito
 
-async def get_inquerito_dict(conn, user):
+async def get_inquerito_dict(conn, user, unique=False, inquerito=None ):
     dict_reponse = {}
     dict_response_inqueritos = []
 
     async with conn.cursor(row_factory=dict_row) as cursor:
         # inquerito
-        print("aqui ")
-        await cursor.execute(SQL_SELECT_INQUERITO(user=user))
+
+        if not unique:
+            await cursor.execute(SQL_SELECT_INQUERITO(user=user))
+        else:
+            await cursor.execute(SQL_SELECT_INQUERITO_UNIQUE(inquerito=inquerito))
 
         list_inquerito = await cursor.fetchall()
 
-        print("aqui ")
         if list_inquerito is None:
             return None
         

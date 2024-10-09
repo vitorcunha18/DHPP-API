@@ -1,5 +1,5 @@
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Header
 from fastapi import status
 from psycopg_pool import AsyncConnectionPool
 from fastapi import HTTPException
@@ -29,6 +29,12 @@ async def get_inquerito(conn:AsyncConnectionPool = Depends(object_postgres.get_c
     """Endpoint para buscar inqueritos"""
     
     return await object_inquerito.get_inquerito(user_auth=usuario_logado, conn=conn)
+
+@router_inquerito.get("/inquerito_unique", status_code=status.HTTP_200_OK, name="Buscar Inquerito")
+async def get_inquerito_unique(inquerito:str = Header(), conn:AsyncConnectionPool = Depends(object_postgres.get_connection), usuario_logado:UsuarioAuth = Depends(get_usuario_autenticado)):
+    """Endpoint para buscar inqueritos"""
+    
+    return await object_inquerito.get_inquerito_unique(inquerito=inquerito, user_auth=usuario_logado, conn=conn)
 
 
 # @router_inquerito.put("/", status_code=status.HTTP_200_OK, name="Editar Usuário", response_model=list[UsuarioResponse])
