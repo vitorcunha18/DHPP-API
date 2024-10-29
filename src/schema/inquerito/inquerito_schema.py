@@ -21,9 +21,11 @@ class Inquerito(BaseModel):
     n_ip: Optional[str] = Field(None, example="JEBBFS")
     tipo_ip: Optional[str] = Field(None, example="JEBBFS")
     tipo_portaria: Optional[str] = Field(None, example="JEBBFS")
-    tipificacao: Optional[str] = Field(None, example="JEBBFS")
+    tipificacao: List[str] = Field(None, example="JEBBFS")
     data_instauracao: Optional[datetime] = Field()
     data_ocorrencia: Optional[datetime] = Field()
+    equipe_investigadora: Optional[str] = Field(None, example="1")
+    periodo_ocorrencia: Optional[str] = Field(None, example="MANHA")
     
 class InqueritoCreate(Inquerito):
     processo: Optional[Processo] = None

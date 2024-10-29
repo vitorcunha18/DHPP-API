@@ -7,6 +7,7 @@ class Endereco(BaseModel):
     bairro: Optional[str]= Field(None, example="MARIA ALVES")
     cidade: Optional[str]= Field(None, example="RIO BRANCO")
     cep: Optional[str]= Field(None, example="01001000")
+    regional: Optional[str]= Field(None, example="PARTE ALTA")
     uf: Optional[Literal[
         'RO',
         'AC',

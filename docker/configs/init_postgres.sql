@@ -1,2 +1,2 @@
-CREATE DATABASE themis;
+CREATE DATABASE dhpp;
 

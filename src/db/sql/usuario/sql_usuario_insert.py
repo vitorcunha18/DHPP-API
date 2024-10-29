@@ -25,14 +25,15 @@ def SQL_INSERT_ENDERECO(dados: Endereco, fk_pessoa=None):
     if fk_pessoa == None:
         return f"""
             INSERT INTO public.endereco(
-                logradouro, n_residencia, bairro, cidade, cep, uf)
+                logradouro, n_residencia, bairro, cidade, cep, uf, regional)
             VALUES 
                 ('{dados.logradouro}', 
                 '{dados.n_residencia}', 
                 '{dados.bairro}', 
                 '{dados.cidade}', 
                 '{dados.cep}', 
-                '{dados.uf}')
+                '{dados.uf}',
+                '{dados.regional}')
             RETURNING endereco_id;
         """.upper()
     else:    

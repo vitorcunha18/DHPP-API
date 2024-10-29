@@ -1,36 +1,48 @@
 from ....schema.inquerito.inquerito_schema import Inquerito, Processo, EnvolvidosInquerito
 
 def SQL_INSERT_INQUERITO(dados: Inquerito, escrivao, cartorio, endereco):
-    return f"""
+    sql = f"""
         INSERT INTO public.inquerito (
-	        n_sinesp, n_ip, tipo_ip, tipo_portaria , data_instauracao, data_ocorrencia, fk_escrivao, fk_cartorio, fk_endereco, tipificacao 
-            )
-	    VALUES 
-            ('{dados.n_sinesp}', 
+	        n_sinesp, 
+            n_ip, 
+            data_instauracao, 
+            data_ocorrencia, 
+            fk_escrivao, 
+            fk_cartorio, 
+            fk_endereco, 
+            tipificacao,
+            fk_equipe,
+            periodo_ocorrencia
+        ) VALUES (
+            '{dados.n_sinesp}', 
             '{dados.n_ip}', 
-            '{dados.tipo_ip}', 
-            '{dados.tipo_portaria}', 
             '{dados.data_instauracao}', 
             '{dados.data_instauracao}', 
             '{escrivao}', 
             '{cartorio}', 
             '{endereco}',
-            '{dados.tipificacao}')
-        RETURNING inquerito_id;
+            ARRAY{dados.tipificacao},
+            {dados.equipe_investigadora},
+            {dados.periodo_ocorrencia}
+            
+        ) RETURNING inquerito_id;
     """.upper()
+    print(sql)
+
+    return sql
     
 
 
 def SQL_INSERT_PROCESSO(dados: Processo, inquerito):
     return f"""
-        INSERT INTO public.processo(
-	        n_processo, representacao_judicial, cumprimento_mandado, fk_inquerito)
-	    VALUES 
-            ('{dados.n_processo}', 
+        INSERT INTO public.processo (
+	        n_processo, representacao_judicial, cumprimento_mandado, fk_inquerito
+        ) VALUES (
+            '{dados.n_processo}', 
             '{dados.representacao_juducial}', 
             '{dados.cumprimento_mandado}',
-            '{inquerito}')
-        RETURNING processo_id;
+            '{inquerito}'
+        ) RETURNING processo_id;
     """.upper()
     
 
