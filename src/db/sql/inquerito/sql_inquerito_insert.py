@@ -23,7 +23,7 @@ def SQL_INSERT_INQUERITO(dados: Inquerito, escrivao, cartorio, endereco):
             '{endereco}',
             ARRAY{dados.tipificacao},
             {dados.equipe_investigadora},
-            {dados.periodo_ocorrencia}
+            '{dados.periodo_ocorrencia}'
             
         ) RETURNING inquerito_id;
     """.upper()
@@ -31,8 +31,6 @@ def SQL_INSERT_INQUERITO(dados: Inquerito, escrivao, cartorio, endereco):
 
     return sql
     
-
-
 def SQL_INSERT_PROCESSO(dados: Processo, inquerito):
     return f"""
         INSERT INTO public.processo (
@@ -44,8 +42,6 @@ def SQL_INSERT_PROCESSO(dados: Processo, inquerito):
             '{inquerito}'
         ) RETURNING processo_id;
     """.upper()
-    
-
     
 def SQL_INSERT_ENVOVIDOS_INQUERITO():
     return f"""
