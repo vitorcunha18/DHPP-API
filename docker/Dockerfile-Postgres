@@ -2,6 +2,6 @@ FROM postgres
 
 COPY ./configs/init_postgres.sql /docker-entrypoint-initdb.d/
 
-COPY ./carga_pesada/dump_postgres.sql /home
+COPY ./carga_pesada/ /home
 
 EXPOSE 5432
