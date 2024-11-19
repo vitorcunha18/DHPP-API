@@ -15,7 +15,6 @@ services:
       - ./:/dhpp-api
     networks:
       - api-compose-networks
-      - stack-network
 
   postgres:
     container_name: container-dhhp-postgres
@@ -37,10 +36,6 @@ services:
     networks:
       - api-compose-networks
       
-      
 networks:
   api-compose-networks:
     driver: bridge
-
-  stack-network:
-    external: true
