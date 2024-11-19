@@ -15,6 +15,7 @@ services:
       - ./:/dhpp-api
     networks:
       - api-compose-networks
+      - stack-network
 
   postgres:
     container_name: container-dhhp-postgres
@@ -35,7 +36,7 @@ services:
       - ./docker/configs/pg_hba.conf:/var/postgres/data/pg_hba.conf
     networks:
       - api-compose-networks
-      - stack-network
+      
       
 networks:
   api-compose-networks:
