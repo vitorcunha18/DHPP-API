@@ -35,7 +35,11 @@ services:
       - ./docker/configs/pg_hba.conf:/var/postgres/data/pg_hba.conf
     networks:
       - api-compose-networks
+      - stack-network
       
 networks:
   api-compose-networks:
     driver: bridge
+
+  stack-network:
+    external: true
