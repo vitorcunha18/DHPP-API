@@ -22,7 +22,7 @@ async def post_usuario(usuario: VitimaCreate = Depends(Mid_uppercase_dependency(
     return await object_vitima.create_vitima(user_json_create=usuario, conn=conn)
 
 
-@router_vitima.get("/", status_code=status.HTTP_200_OK, name="Buscar vitima", response_model=list[VitimaResponse])
+@router_vitima.get("/", status_code=status.HTTP_200_OK, name="Buscar vitima")
 async def get_usuario(cpf:str, conn:AsyncConnectionPool = Depends(object_postgres.get_connection), usuario_logado: UsuarioResponse = Depends(get_usuario_autenticado)):
     """Endpoint para buscar vitima"""
     

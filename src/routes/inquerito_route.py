@@ -36,6 +36,12 @@ async def get_inquerito_unique(inquerito:str = Header(), conn:AsyncConnectionPoo
     
     return await object_inquerito.get_inquerito_unique(inquerito=inquerito, user_auth=usuario_logado, conn=conn)
 
+@router_inquerito.get("/inquerito_vitimas", status_code=status.HTTP_200_OK, name="Buscar Inquerito")
+async def get_inquerito_unique(inquerito:str = Header(), conn:AsyncConnectionPool = Depends(object_postgres.get_connection), usuario_logado:UsuarioAuth = Depends(get_usuario_autenticado)):
+    """Endpoint para buscar vitimas do inquerito"""
+    
+    return await object_inquerito.get_inquerito_vitima_list(inquerito=inquerito, user_auth=usuario_logado, conn=conn)
+
 
 @router_inquerito.put("/", status_code=status.HTTP_200_OK, name="Editar Inquerito")
 async def get_update_inquerito(inquerito:str = Header(), json_data: InqueritoUpdate = Depends(Mid_uppercase_dependency(InqueritoUpdate)), conn:AsyncConnectionPool = Depends(object_postgres.get_connection), usuario_logado:UsuarioAuth = Depends(get_usuario_autenticado)):

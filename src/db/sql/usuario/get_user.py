@@ -9,8 +9,11 @@ async def getUser(conn, pessoa_id):
 
     async with conn.cursor(row_factory=dict_row) as cursor:
             
+        print("===================", pessoa_id)
+        
         # usuario
         await cursor.execute(SQL_SELECT_PESSOA(id=pessoa_id))
+
         usuario = await cursor.fetchone()
 
         if usuario is None:

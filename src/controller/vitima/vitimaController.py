@@ -8,7 +8,7 @@ from psycopg.rows import dict_row
 from ...schema.vitima.vitima_schema import VitimaCreate
 
 from ...db.sql.vitima.sql_vitima_insert import SQL_INSERT_VITIMA
-from ...db.sql.vitima.sql_vitima_select import SQL_SELECT_VITIMA
+from ...db.sql.vitima.sql_vitima_select import SQL_SELECT_VITIMA_UNIQUE
 
 from ...db.sql.usuario.sql_usuario_insert import SQL_INSERT_PESSOA, SQL_INSERT_CONTATO, SQL_INSERT_ENDERECO
 from ...db.sql.utils.update_generic import SQL_UPDATE_GENERICO
@@ -49,7 +49,8 @@ class Vitima():
           try:
                async with conn.cursor(row_factory=dict_row) as cursor:
                
-                    await cursor.execute(SQL_SELECT_VITIMA(cpf))
+                    await cursor.execute(SQL_SELECT_VITIMA_UNIQUE(cpf=cpf))
+                    
                     
                     pessoa = await cursor.fetchall()
 

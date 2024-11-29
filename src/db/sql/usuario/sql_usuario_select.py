@@ -1,6 +1,6 @@
 from ....auth.security import verificar_senha
 
-def SQL_SELECT_PESSOA(cpf=None, id=None):
+def SQL_SELECT_PESSOA(cpf=False, id=None):
     if cpf:
         sqlWhere = f"p.cpf = '{cpf}'"
     else:
@@ -41,6 +41,8 @@ def SQL_SELECT_PESSOA(cpf=None, id=None):
 
         WHERE {sqlWhere}
     """
+
+    print(sql)
     return sql 
 
 

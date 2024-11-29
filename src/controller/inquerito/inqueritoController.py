@@ -13,6 +13,8 @@ from ...db.sql.inquerito.sql_inquerito_insert import SQL_INSERT_INQUERITO, SQL_I
 from ...db.sql.inquerito.sql_inquerito_select import SQL_SELECT_INQUERITO
 from ...db.sql.inquerito.sql_inquerito_update import SQL_UPDATE_INQUERITO
 from ...db.sql.inquerito.get_inquerito import get_inquerito_dict
+from ...db.sql.vitima.get_vitima import get_vitima_dict
+
 
 from ...db.sql.utils.update_endereco import SQL_UPDATE_ENDERECO
 
@@ -133,6 +135,16 @@ class Inquerito():
           # try:
 
                return await get_inquerito_dict(conn=conn, inquerito=inquerito, unique=True ,user=user_auth)
+          # except Exception as erro:
+          #      pass
+
+          # finally:
+          #     await cursor.close()
+     
+     async def get_inquerito_vitima_list(self, inquerito, user_auth:UsuarioAuth, conn: AsyncConnectionPool): 
+          # try:
+
+               return await get_vitima_dict(conn=conn, inquerito=inquerito, unique=False ,user=user_auth)
           # except Exception as erro:
           #      pass
 
