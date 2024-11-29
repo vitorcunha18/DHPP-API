@@ -5,7 +5,7 @@ from psycopg_pool import AsyncConnectionPool
 from fastapi import HTTPException
 
 from ..controller.inquerito.inqueritoController import object_inquerito
-from ..schema.inquerito.inquerito_schema import InqueritoCreate
+from ..schema.inquerito.inquerito_schema import InqueritoCreate, InqueritoUpdate
 from ..middlewares.upper_case import Mid_uppercase_dependency
 from ..db import object_postgres
 
@@ -37,11 +37,11 @@ async def get_inquerito_unique(inquerito:str = Header(), conn:AsyncConnectionPoo
     return await object_inquerito.get_inquerito_unique(inquerito=inquerito, user_auth=usuario_logado, conn=conn)
 
 
-# @router_inquerito.put("/", status_code=status.HTTP_200_OK, name="Editar Usuário", response_model=list[UsuarioResponse])
-# async def get_usuario(usuario: UsuarioUpdate = Depends(Mid_uppercase_dependency(UsuarioUpdate)), conn:AsyncConnectionPool = Depends(object_postgres.get_connection)):
-#     """Endpoint para editar usuário"""
+@router_inquerito.put("/", status_code=status.HTTP_200_OK, name="Editar Inquerito")
+async def get_update_inquerito(inquerito:str = Header(), json_data: InqueritoUpdate = Depends(Mid_uppercase_dependency(InqueritoUpdate)), conn:AsyncConnectionPool = Depends(object_postgres.get_connection), usuario_logado:UsuarioAuth = Depends(get_usuario_autenticado)):
+    """Endpoint para update usuário"""
 
-#     return await object_usuario.update_usuario(user_json_update=usuario, conn=conn)
+    return await object_inquerito.update_inquerito(id_inquerito=inquerito, user_inquerito_update=json_data, usuario_logado=usuario_logado, conn=conn)
 
 
 

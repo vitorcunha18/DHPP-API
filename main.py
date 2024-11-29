@@ -12,18 +12,20 @@ app = FastAPI(
     version=informacao_api['version_numero'],
 )
   
-origins = ["*"]
+origins = [
+    "http://localhost:3000",  # Domínio local de front-end (React, Angular, etc.)
+    "*"                      # Permite todos os domínios (não recomendado para produção)
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=origins,            # Lista de origens permitidas
+    allow_credentials=True,           # Permite envio de cookies e headers de autenticação
+    allow_methods=["*"],              # Permite todos os métodos (GET, POST, PUT, DELETE, etc.)
+    allow_headers=["*"],              # Permite todos os headers
 )
 
 app.include_router(index_router, prefix=informacao_api["version_prefix"])
-
 
 if __name__ == "__main__":
     import uvicorn

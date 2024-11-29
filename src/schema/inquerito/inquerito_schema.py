@@ -26,6 +26,8 @@ class Inquerito(BaseModel):
     data_ocorrencia: Optional[datetime] = Field()
     equipe_investigadora: Optional[str] = Field(None, example="1")
     periodo_ocorrencia: Optional[str] = Field(None, example="MANHA")
+    tipo_instauracao: Optional[str] = Field(None, example="NUIBAIS")
+
     
 class InqueritoCreate(Inquerito):
     processo: Optional[Processo] = None
@@ -34,3 +36,14 @@ class InqueritoCreate(Inquerito):
     suspeito: Optional[List[SuspeitoCreate]] = None
      
 
+
+class InqueritoUpdate(BaseModel):
+    n_sinesp: Optional[str] = Field(None, example="DIEINA")
+    n_ip: Optional[str] = Field(None, example="JEBBFS")
+    tipificacao: List[str] = Field(None, example="JEBBFS")
+    data_instauracao: Optional[datetime] = Field()
+    data_ocorrencia: Optional[datetime] = Field()
+    equipe_investigadora: Optional[str] = Field(None, example="1")
+    periodo_ocorrencia: Optional[str] = Field(None, example="MANHA")
+    tipo_instauracao: Optional[str] = Field(None, example="NUIBAIS")
+    endereco_ocorrencia: Optional[Endereco]

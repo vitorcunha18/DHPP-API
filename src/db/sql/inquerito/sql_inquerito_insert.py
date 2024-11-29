@@ -7,26 +7,28 @@ def SQL_INSERT_INQUERITO(dados: Inquerito, escrivao, cartorio, endereco):
             n_ip, 
             data_instauracao, 
             data_ocorrencia, 
+            tipificacao,
+            periodo_ocorrencia,
+            tipo_instauracao,
             fk_escrivao, 
             fk_cartorio, 
             fk_endereco, 
-            tipificacao,
-            fk_equipe,
-            periodo_ocorrencia
+            fk_equipe
         ) VALUES (
             '{dados.n_sinesp}', 
             '{dados.n_ip}', 
             '{dados.data_instauracao}', 
-            '{dados.data_instauracao}', 
+            '{dados.data_ocorrencia}', 
+             ARRAY{dados.tipificacao},
+            '{dados.periodo_ocorrencia}',
+            '{dados.tipo_instauracao}',
             '{escrivao}', 
             '{cartorio}', 
             '{endereco}',
-            ARRAY{dados.tipificacao},
-            {dados.equipe_investigadora},
-            '{dados.periodo_ocorrencia}'
+             {dados.equipe_investigadora}
             
         ) RETURNING inquerito_id;
-    """.upper()
+    """
     print(sql)
 
     return sql

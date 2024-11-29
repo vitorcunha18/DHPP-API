@@ -34,6 +34,7 @@ services:
       POSTGRES_DB: ${DATABASE_POSTGRES}
     volumes:
       - ./docker/configs/pg_hba.conf:/var/postgres/data/pg_hba.conf
+      - dhhp_bd:/var/lib/postgresql/data
     networks:
       - api-compose-networks
       
@@ -43,3 +44,5 @@ networks:
 
   stack-network:
     external: true
+volumes:
+  dhhp_bd:

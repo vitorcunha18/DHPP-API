@@ -20,7 +20,6 @@ def SQL_INSERT_PESSOA(dados: Pessoa):
         RETURNING pessoa_id;
     """.upper()
     
-
 def SQL_INSERT_ENDERECO(dados: Endereco, fk_pessoa=None):
     if fk_pessoa == None:
         return f"""
@@ -51,7 +50,6 @@ def SQL_INSERT_ENDERECO(dados: Endereco, fk_pessoa=None):
             RETURNING endereco_id;
         """.upper()
     
-
 def SQL_INSERT_CONTATO(dados: Contato, fk_pessoa):
     return f"""
         INSERT INTO public.contato(

@@ -11,7 +11,10 @@ from ...schema.usuario.usuario_schema import UsuarioAuth
 
 from ...db.sql.inquerito.sql_inquerito_insert import SQL_INSERT_INQUERITO, SQL_INSERT_ENVOVIDOS_INQUERITO, SQL_INSERT_PROCESSO
 from ...db.sql.inquerito.sql_inquerito_select import SQL_SELECT_INQUERITO
+from ...db.sql.inquerito.sql_inquerito_update import SQL_UPDATE_INQUERITO
 from ...db.sql.inquerito.get_inquerito import get_inquerito_dict
+
+from ...db.sql.utils.update_endereco import SQL_UPDATE_ENDERECO
 
 from ...db.sql.usuario.sql_usuario_insert import SQL_INSERT_ENDERECO, SQL_INSERT_PESSOA, SQL_INSERT_CONTATO
 from ...db.sql.suspeito.sql_suspeito_insert import SQL_INSERT_SUSPEITO
@@ -125,6 +128,7 @@ class Inquerito():
 
           # finally:
           #     await cursor.close()
+     
      async def get_inquerito_unique(self, inquerito, user_auth:UsuarioAuth, conn: AsyncConnectionPool): 
           # try:
 
@@ -135,53 +139,51 @@ class Inquerito():
           # finally:
           #     await cursor.close()
 
-     async def update_inquerito(self, user_json_update: create_inquerito, conn: AsyncConnectionPool): 
-               try:
-                    filter_keys = user_json_update.model_dump(exclude_none=True)
+     async def update_inquerito(self, id_inquerito, user_inquerito_update: create_inquerito, usuario_logado, conn: AsyncConnectionPool): 
+               # try:
+                    filter_keys = user_inquerito_update.model_dump(exclude_none=True)
 
                     async with conn.transaction():
                          async with conn.cursor() as cursor:
-                              set_pessoa_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.items() if key not in ['usuario', 'endereco', 'contato']])
+                              # set_inquerito_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.items() if key not in ['endereco_ocorrencia']])
 
-                              await cursor.execute(SQL_UPDATE_GENERICO(table="pessoa", usuario=19, dados=set_pessoa_clause, extra="RETURNING CPF"))
+                              set_inquerito_clause = ", ".join([
+                                   f"fk_equipe = '{value}'" if key == "equipe_investigadora" else
+                                   f"{key} = ARRAY[{', '.join([f'\'{v.lower()}\'' if str(v).lower() == 'false' else f'\'{v}\'' for v in value])}]" if key == "tipificacao" else
+                                   f"{key} = '{value}'"
+                                   for key, value in filter_keys.items()
+                                   if key not in ['endereco_ocorrencia']
+                              ])
 
-                              pessoa_update = await cursor.fetchall()
+                              print("clause", set_inquerito_clause)
 
-                              if 'usuario' in filter_keys:
-                                   set_usuario_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.get('usuario', {}).items()])
-                                   
-                                   await cursor.execute(SQL_UPDATE_GENERICO(table="usuario", usuario=19, dados=set_usuario_clause, fk=True, fk_name="fk_pessoa"))
+                              await cursor.execute(SQL_UPDATE_INQUERITO(set_edit=set_inquerito_clause, where_codition=f"inquerito_id = {id_inquerito}", return_data="fk_endereco"))
 
-                              if 'endereco' in filter_keys:
-                                   set_endereco_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.get('endereco', {}).items()])
-                                 
-                                   await cursor.execute(SQL_UPDATE_GENERICO(table="endereco", usuario=19, dados=set_endereco_clause, fk=True, fk_name="fk_pessoa")) 
-                    
-                              if 'contato' in filter_keys:
-                                   set_contato_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.get('contato', {}).items()])
+                              inquerito_db = await cursor.fetchone()
 
-                                   await cursor.execute(SQL_UPDATE_GENERICO(table="contato", usuario=19, dados=set_contato_clause, fk=True, fk_name="fk_pessoa"))
+                              if 'endereco_ocorrencia' in filter_keys:
+                                   set_endereco_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.get('endereco_ocorrencia', {}).items()])
+
+                                   await cursor.execute(SQL_UPDATE_ENDERECO(set_edit=set_endereco_clause, where_codition=f"endereco_id = {inquerito_db[0]}")) 
 
 
-                              await cursor.execute(SQL_SELECT_PESSOA(pessoa_update[0][0]))
-                              
-                              pessoa = await self.get_usuario(cpf=pessoa_update[0][0], conn=conn)
+                            
 
-                    return pessoa
+                    return JSONResponse(status_code=status.HTTP_200_OK, content={'message':'Inquerito atualizado com sucesso'})
 
-               except errors.InvalidDatetimeFormat:
-                    return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'As datas não atendem'})
+               # except errors.InvalidDatetimeFormat:
+               #      return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'As datas não atendem'})
 
-               except errors.UniqueViolation:
-                    return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Um dos valores já existe'}) 
+               # except errors.UniqueViolation:
+               #      return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Um dos valores já existe'}) 
                
-               except errors.StringDataRightTruncation:
-                    return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Limite do dado '})
+               # except errors.StringDataRightTruncation:
+               #      return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Limite do dado '})
 
-               except Exception as erro:
-                    return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Erro genérico'})
+               # except Exception as erro:
+               #      return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Erro genérico'})
 
-               finally:
-                    await cursor.close()
+               # finally:
+               #      await cursor.close()
 
 object_inquerito = Inquerito()
