@@ -52,6 +52,7 @@ class Inquerito():
                               list_vitima = []
                               list_suspeito = []
 
+                              print("vou fazer o suspeito")
                               for suspeito in inquerito_json_create.suspeito:
                                    await cursor.execute(SQL_INSERT_PESSOA(suspeito))
 
@@ -74,11 +75,13 @@ class Inquerito():
 
                                    list_suspeito.append(suspeito_id)
                                    
-
+                              print("vou fazer o vitima")
                               for vitima in inquerito_json_create.vitima:
                                    await cursor.execute(SQL_INSERT_PESSOA(vitima))
 
                                    pessoa_id = (await cursor.fetchone())[0]
+
+                                   print(vitima.vitima)
 
                                    if pessoa_id:
                                         if vitima.endereco:
@@ -144,7 +147,7 @@ class Inquerito():
      async def get_inquerito_vitima_list(self, inquerito, user_auth:UsuarioAuth, conn: AsyncConnectionPool): 
           # try:
 
-               return await get_vitima_dict(conn=conn, inquerito=inquerito, unique=False ,user=user_auth)
+               return await get_vitima_dict(conn=conn, inquerito=inquerito, unique=False, user=user_auth)
           # except Exception as erro:
           #      pass
 

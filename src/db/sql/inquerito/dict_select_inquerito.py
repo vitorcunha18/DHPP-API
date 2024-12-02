@@ -1,6 +1,6 @@
 def split_table_inquerito(data, inquerito=False):
     if inquerito:
-        tabelas = ["inquerito", "endereco"]
+        tabelas = ["inquerito", "endereco", "cartorio"]
         dict_data = {tabela: {} for tabela in tabelas}
     
 

@@ -10,7 +10,10 @@ async def get_inquerito_dict(conn, user, unique=False, inquerito=None ):
         # inquerito
 
         if not unique:
-            await cursor.execute(SQL_SELECT_INQUERITO(user=user))
+            if user["funcao"]["cartorio"]["cod_cartorio"] == 5:
+                await cursor.execute(SQL_SELECT_INQUERITO(user=user, all_cartorio=True))
+            else:
+                await cursor.execute(SQL_SELECT_INQUERITO(user=user))
         else:
             await cursor.execute(SQL_SELECT_INQUERITO_UNIQUE(inquerito=inquerito))
 
@@ -26,6 +29,7 @@ async def get_inquerito_dict(conn, user, unique=False, inquerito=None ):
             dict_reponse.update(dict_inquerito["inquerito"])
 
             dict_reponse["endereco"] = {**dict_inquerito["endereco"]}
+            dict_reponse["cartorio"] = {**dict_inquerito["cartorio"]}
 
             dict_response_inqueritos.append(dict_reponse)
 

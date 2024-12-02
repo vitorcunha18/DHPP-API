@@ -22,7 +22,7 @@ def SQL_INSERT_PESSOA(dados: Pessoa):
     
 def SQL_INSERT_ENDERECO(dados: Endereco, fk_pessoa=None):
     if fk_pessoa == None:
-        return f"""
+        sql = f"""
             INSERT INTO public.endereco(
                 logradouro, n_residencia, bairro, cidade, cep, uf, regional)
             VALUES 
@@ -35,8 +35,10 @@ def SQL_INSERT_ENDERECO(dados: Endereco, fk_pessoa=None):
                 '{dados.regional}')
             RETURNING endereco_id;
         """.upper()
+        print(sql)
+        return sql
     else:    
-        return f"""
+        sql = f"""
             INSERT INTO public.endereco(
                 logradouro, n_residencia, bairro, cidade, cep, uf, fk_pessoa)
             VALUES 
@@ -49,6 +51,9 @@ def SQL_INSERT_ENDERECO(dados: Endereco, fk_pessoa=None):
                 '{fk_pessoa}')
             RETURNING endereco_id;
         """.upper()
+    
+        print(sql)
+        return sql
     
 def SQL_INSERT_CONTATO(dados: Contato, fk_pessoa):
     return f"""

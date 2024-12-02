@@ -1,6 +1,6 @@
 
 from fastapi import APIRouter, Depends
-from fastapi import status
+from fastapi import status, Header
 from psycopg_pool import AsyncConnectionPool
 from fastapi import HTTPException
 
@@ -23,17 +23,17 @@ async def post_usuario(usuario: VitimaCreate = Depends(Mid_uppercase_dependency(
 
 
 @router_vitima.get("/", status_code=status.HTTP_200_OK, name="Buscar vitima")
-async def get_usuario(cpf:str, conn:AsyncConnectionPool = Depends(object_postgres.get_connection), usuario_logado: UsuarioResponse = Depends(get_usuario_autenticado)):
+async def get_usuario(id_vitima: int = Header(None), cpf_vitima: str = Header(None), conn:AsyncConnectionPool = Depends(object_postgres.get_connection), usuario_logado: UsuarioResponse = Depends(get_usuario_autenticado)):
     """Endpoint para buscar vitima"""
     
-    return await object_vitima.get_vitima(cpf=cpf, conn=conn)
+    return await object_vitima.get_vitima(cpf_vitima=cpf_vitima, id_vitima=id_vitima, conn=conn)
 
 
-@router_vitima.put("/", status_code=status.HTTP_200_OK, name="Editar vitima", response_model=list[VitimaCreate])
-async def get_usuario(usuario: VitimaCreate = Depends(Mid_uppercase_dependency(VitimaCreate)), conn:AsyncConnectionPool = Depends(object_postgres.get_connection), usuario_logado: UsuarioResponse = Depends(get_usuario_autenticado)):
+@router_vitima.put("/", status_code=status.HTTP_200_OK, name="Editar vitima")
+async def get_usuario(id_vitima: int = Header(None), cpf_vitima: str = Header(None), usuario: VitimaCreate = Depends(Mid_uppercase_dependency(VitimaCreate)), conn:AsyncConnectionPool = Depends(object_postgres.get_connection), usuario_logado: UsuarioResponse = Depends(get_usuario_autenticado)):
     """Endpoint para editar vitima"""
 
-    return await object_vitima.update_vitima(user_json_update=usuario, conn=conn)
+    return await object_vitima.update_vitima(id_vitima=id_vitima, cpf_vitima=cpf_vitima, user_json_update=usuario, conn=conn)
 
 
 

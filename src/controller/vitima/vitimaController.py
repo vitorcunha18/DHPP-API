@@ -9,6 +9,7 @@ from ...schema.vitima.vitima_schema import VitimaCreate
 
 from ...db.sql.vitima.sql_vitima_insert import SQL_INSERT_VITIMA
 from ...db.sql.vitima.sql_vitima_select import SQL_SELECT_VITIMA_UNIQUE
+from ...db.sql.vitima.get_vitima import get_vitima_dict
 
 from ...db.sql.usuario.sql_usuario_insert import SQL_INSERT_PESSOA, SQL_INSERT_CONTATO, SQL_INSERT_ENDERECO
 from ...db.sql.utils.update_generic import SQL_UPDATE_GENERICO
@@ -45,71 +46,98 @@ class Vitima():
                print(erro)
                return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Erro genérico'})
 
-     async def get_vitima(self, cpf:str, conn: AsyncConnectionPool): 
-          try:
-               async with conn.cursor(row_factory=dict_row) as cursor:
-               
-                    await cursor.execute(SQL_SELECT_VITIMA_UNIQUE(cpf=cpf))
+     async def get_vitima(self, cpf_vitima:str, id_vitima:str, conn: AsyncConnectionPool): 
+          if not id_vitima and not cpf_vitima:
+               raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'message':"É necessário fornecer 'id' ou 'cpf'"})
+          
+          if id_vitima and cpf_vitima:
+               raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'message':"Envie apenas 'id' ou 'cpf', não ambos."})
+    
+          print(cpf_vitima, id_vitima)
+
+          try: 
+               # async with conn.cursor(row_factory=dict_row) as cursor:
+                    if id_vitima:
+                         # Lógica para buscar o usuário pelo id
+                         # await cursor.execute(SQL_SELECT_VITIMA_UNIQUE(id=id_vitima))
+                        pessoa = await get_vitima_dict(conn=conn, user=id_vitima, unique=True)
                     
-                    
-                    pessoa = await cursor.fetchall()
+                    if cpf_vitima:
+                         # Lógica para buscar o usuário pelo cpf
+                         # await cursor.execute(SQL_SELECT_VITIMA_UNIQUE(cpf=cpf_vitima))
+                        pessoa = await get_vitima_dict(conn=conn, cpf=cpf_vitima, unique=True)
+
+                    # pessoa = await cursor.fetchall()
 
                     return pessoa
+
           except Exception as erro:
                pass
 
-          finally:
-              await cursor.close()
+     async def update_vitima(self, id_vitima, cpf_vitima,user_json_update, conn: AsyncConnectionPool): 
+               if not id_vitima and not cpf_vitima:
+                    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'message':"É necessário fornecer 'id' ou 'cpf'"})
+          
+               if id_vitima and cpf_vitima:
+                    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'message':"Envie apenas 'id' ou 'cpf', não ambos."})
 
-     async def update_vitima(self, user_json_update, conn: AsyncConnectionPool): 
-               try:
-                    filter_keys = user_json_update.model_dump(exclude_none=True)
+               # try:
+               filter_keys = user_json_update.model_dump(exclude_none=True)
 
-                    async with conn.transaction():
-                         async with conn.cursor() as cursor:
-                              set_pessoa_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.items() if key not in ['endereco', 'contato', 'vitima']])
+               async with conn.transaction():
+                    async with conn.cursor() as cursor:
+                         set_pessoa_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.items() if key not in ['endereco', 'contato', 'vitima']])
 
-                              await cursor.execute(SQL_UPDATE_GENERICO(table="pessoa", usuario=23, dados=set_pessoa_clause, extra="RETURNING CPF"))
+                         if id_vitima:
+                              # Lógica para buscar o usuário pelo id
+                              await cursor.execute(SQL_UPDATE_GENERICO(table="pessoa", fk=True, fk_name="pessoa_id", usuario=id_vitima, dados=set_pessoa_clause, extra="RETURNING pessoa_id"))
+                         
+                         if cpf_vitima:
+                              # Lógica para buscar o usuário pelo cpf
+                              await cursor.execute(SQL_UPDATE_GENERICO(table="pessoa", fk=True, fk_name="cpf", usuario=f"'{cpf_vitima}'", dados=set_pessoa_clause, extra="RETURNING pessoa_id"))
 
-                              pessoa_update = await cursor.fetchall()
-
-                              if 'endereco' in filter_keys:
-                                   set_endereco_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.get('endereco', {}).items()])
-                                 
-                                   await cursor.execute(SQL_UPDATE_GENERICO(table="endereco", usuario=23, dados=set_endereco_clause, fk=True, fk_name="fk_pessoa")) 
-                    
-                              if 'contato' in filter_keys:
-                                   set_contato_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.get('contato', {}).items()])
-
-                                   await cursor.execute(SQL_UPDATE_GENERICO(table="contato", usuario=23, dados=set_contato_clause, fk=True, fk_name="fk_pessoa"))
-
-                              if 'vitima' in filter_keys:
-                                   set_vitima_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.get('delegado', {}).items()])
-
-                                   await cursor.execute(SQL_UPDATE_GENERICO(table="vitima", usuario=23, dados=set_vitima_clause, fk=True, fk_name="fk_pessoa"))
+                         pessoa_update = await cursor.fetchone()
 
 
-                              await cursor.execute(SQL_SELECT_VITIMA(pessoa_update[0][0]))
-                              
-                              pessoa = await self.get_vitima(cpf=pessoa_update[0][0], conn=conn)
+                         print("updatde", pessoa_update[0])
 
+                         if 'endereco' in filter_keys:
+                              set_endereco_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.get('endereco', {}).items()])
 
-                    return pessoa
-
-               except errors.InvalidDatetimeFormat:
-                    return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'As datas não atendem'})
-
-               except errors.UniqueViolation:
-                    return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Um dos valores já existe'}) 
+                              await cursor.execute(SQL_UPDATE_GENERICO(table="endereco", usuario=f"'{pessoa_update[0]}'", dados=set_endereco_clause, fk=True, fk_name="fk_pessoa")) 
                
-               except errors.StringDataRightTruncation:
-                    return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Limite do dado '})
+                         if 'contato' in filter_keys:
+                              set_contato_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.get('contato', {}).items()])
 
-               except Exception as erro:
-                    print(erro)
-                    return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Erro genérico'})
+                              await cursor.execute(SQL_UPDATE_GENERICO(table="contato", usuario=f"'{pessoa_update[0]}'", dados=set_contato_clause, fk=True, fk_name="fk_pessoa"))
 
-               finally:
-                    await cursor.close()
+                         if 'vitima' in filter_keys:
+                              set_vitima_clause = ", ".join([f"{key} = '{value}'" for key, value in filter_keys.get('vitima', {}).items()])
+
+                              await cursor.execute(SQL_UPDATE_GENERICO(table="vitima", usuario=f"'{pessoa_update[0]}'", dados=set_vitima_clause, fk=True, fk_name="fk_pessoa"))
+
+
+                         # await cursor.execute(SQL_SELECT_VITIMA_UNIQUE(cpf=pessoa_update[0][0]))
+                         # pessoa = await self.get_vitima(cpf=pessoa_update[0][0], conn=conn)
+                         
+
+
+               return {'messa': 'certo'}
+
+               # except errors.InvalidDatetimeFormat:
+               #      return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'As datas não atendem'})
+
+               # except errors.UniqueViolation:
+               #      return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Um dos valores já existe'}) 
+               
+               # except errors.StringDataRightTruncation:
+               #      return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Limite do dado '})
+
+               # except Exception as erro:
+               #      print(erro)
+               #      return HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail={'message':'Erro genérico'})
+
+               # finally:
+               #      await cursor.close()
 
 object_vitima = Vitima()

@@ -46,8 +46,6 @@ async def usuario_autenticar(form_data: OAuth2PasswordRequestForm = Depends(), s
             detail={"message": "Usuário não encontrado. Verifique os parâmetros fornecidos."}
         )
     
-     
-    print(usuario) 
     # configurando o acesso
     TOKEN = criar_token_acesso(sub=usuario['pessoa_id'])
 

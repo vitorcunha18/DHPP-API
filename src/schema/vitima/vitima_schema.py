@@ -9,6 +9,8 @@ from ..contato.contato_schema import Contato
 class Vitima(BaseModel):
     faccao: Optional[str]= Field(None, example="DIEINA")
     vulgo: Optional[str]= Field(None, example="JEBBFS")
+    ligacao_suspeito: Optional[str]= Field(None, example="JEBBFS")
+    situacao: Optional[str]= Field(None, example="JEBBFS")
     
 
 class VitimaCreate(Pessoa):
