@@ -9,6 +9,7 @@ class Endereco(BaseModel):
     cep: Optional[str]= Field(None, example="01001000")
     regional: Optional[str]= Field(None, example="PARTE ALTA")
     uf: Optional[Literal[
+        's/n',
         'RO',
         'AC',
         'AM',
