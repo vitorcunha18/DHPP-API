@@ -12,7 +12,7 @@ def SQL_INSERT_PESSOA(dados: Pessoa):
             ('{dados.nome}', 
             '{dados.nome_social}', 
             '{dados.nascimento}', 
-            '{dados.cpf}', 
+            '{dados.cpf.replace(".","").replace("-","")}', 
             '{dados.sexo}', 
             '{dados.etnia}', 
             '{dados.lgbt}', 

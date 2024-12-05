@@ -12,6 +12,11 @@ class Vitima(BaseModel):
     ligacao_suspeito: Optional[str]= Field(None, example="JEBBFS")
     situacao: Optional[str]= Field(None, example="JEBBFS")
     
+class VitimaUpdateBase(BaseModel):
+    faccao: Optional[str]= Field(None, example="DIEINA")
+    vulgo: Optional[str]= Field(None, example="JEBBFS")
+    ligacao_suspeito: Optional[bool]= Field(None, example="JEBBFS")
+    situacao: Optional[str]= Field(None, example="JEBBFS")
 
 class VitimaCreate(Pessoa):
     endereco: Optional[Endereco]= None
@@ -22,5 +27,5 @@ class VitimaCreate(Pessoa):
 class VitimaResponse(Vitima, Endereco, Contato, Pessoa):
     pass
 
-class VitimaUpdate(Vitima, Endereco, Contato, Pessoa):
+class VitimaUpdate(VitimaUpdateBase, Endereco, Contato, Pessoa):
     pass
